@@ -1,0 +1,43 @@
+1A.
+
+li $a0, 44
+add $a1, $a2, $0
+
+1B. 
+
+beq $t0, $t1, label
+li $a0, 1
+j ends
+label: li $a0, 0
+end:
+
+1C. 
+slt $a0, $t0, $t1
+
+1D.
+
+beq $t0, $t1, equals
+slt $a0, $t0, $t1
+j end
+equals: addi $a0, $0, 1
+end:
+
+1E. (TODO)
+
+ADDRESS IN HEX | MIPS INSTRUCTION | BINARY MACHINE LANGUAGE | MACHINE LANGUAGE
+
+#R-TYPE: OPP CODE | REGISTER SOURCE | REGISTER TARGET | REGISTER DESTINATION |
+SHIFT | FUNCTION
+
+#I-TYPE: OPP CODE | REGISTER SOURCE | REGISTER DESTINATION | CONSTANT
+
+#J-TYPE: OPP CODE | JUMP ADDRESS
+
+0x10000000 | beq $t0, $t1, equals | 0001 0001 0000 1001 0000 0000 0000 0010 
+0x10000004 | slt $a0, $t0, $t1 | 0000 0001 0000 1001 0010 0000 0010 1010
+0x10000008 | j end | 0000 10    
+0x1000000C | equals: addi $a0, $0, 1 | 0010 0001 0000 0000 0000 0000 0001  
+0x10000010 | end: 
+
+2A
+
