@@ -50,4 +50,34 @@ main: sw $s1, 0($t0)
       addi $t0, $t0, 4
       bne $s0, $s1, main
 
-4.
+4. 
+initialize: addi $s0, $0, 0	#initialize i
+	    addi $s1, $0, 40    #end condition
+main: 	    beq $s0, $s1, end	#check condition 
+      	    add $t1, $a1, $s0	#store address of b[i] into $t1
+	    lw $s3, 0($t1)	#load b[i] into $s3
+	    add $t2, $s3, $s0 	#calculate b[i] + i
+	    add $t3, $s0, $s0   #make 2*i
+	    add $t4, $a1, $t3	#store address of a[2i] into $t4
+	    sw $t2, 0($t4) 	#store the value of b[i] + i
+	    add $s0, $s0, 4 	#increment $s0 by four
+	    j main		#loop back to main 
+	    
+end:
+
+
+
+------------------------------------------------------------------------extra code
+initalize: addi $s0, $0, 0	#initialize i
+	    addi $s1, $0, 10	#end condition
+main: beq $s0, $s1, end		#check condition
+      sll $s2, $s0, 2 		#increment i by 4, since 32-bit
+      add $s3, $a1, $t2		#find address of b[i]
+end:
+
+
+
+
+
+
+
