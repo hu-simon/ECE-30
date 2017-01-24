@@ -28,7 +28,7 @@ j       end
 equals: addi $a0, $0, 1
 end:
 
-1E. (TODO)
+1E. 
 
 ADDRESS IN HEX | MIPS INSTRUCTION            | BINARY SEQUENCE                         | MACHINE LANGUAGE
 
