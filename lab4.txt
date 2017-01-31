@@ -1,0 +1,93 @@
+#1.
+
+a. CPI = 3(0.6) + n(0.25) + 8(0.15) = 5 -> n = 8
+
+b. ET = 12E-3 = (I * CPI)/f = (I * 5)/(1.5E9) -> I = 3.6E6
+
+c. ET_New = 9.6E-3 = (3.6E6 * CPI)/(1.5E9) -> CPI = 4 = 3(0.6) + k(0.25) + 8(0.15) -> k = 4
+
+#2. 
+
+#3. 
+
+ADDRESS    | INSTRUCTION            | TYPE | BINARY                                  | HEXADECIMAL
+0x10000000 | bne $a0, $a1, notequal | I    | 0001 0100 1100 0011 0000 0000 0000 0010 | 0x14C30002
+0x10000004 | add $t0, $0, $a0 	    | R    | 0000 0000 0000 0011 0011 1000 0010 0000 | 0x00033820
+0x10000008 | j done                 | J    | 0000 1000 0000 0000 0000 0000 0000 0100 | 0x08000004
+0x1000000C | addi $t0, $0, 1        | I    | 0010 0000 0000 0111 0000 0000 0000 0001 | 0x20070001
+0x10000010 | done
+
+#4. 
+
+init:	addi $t0, $0, 1 	#initialize $t0 = i
+	addi $v0, $0, 0		#initialize count
+main: 	slt  $t1, $t0, $a1
+	beq  $t1, $0, done
+	lw   $t1, 0($a0)
+	slt  $t2, $t1, $0
+	addi $t0, $t0, 1
+	addi $a0, $a0, 4
+	bne  $t2, $0, main
+	addi $v0, $v0, 1
+	j main
+done: 	jr $ra
+
+#5.
+
+a. CPI = 3 = n(0.5) + 8(0.25) + 2(0.25) -> n = 1
+
+b. ET = 4.5E-3 = (I * 3)/(1E9) -> I = 1.5E6
+
+c. ET_New = 3.375E-3 = (1.5E6 * CPI)/(1E9) -> CPI = 2.25 = (0.5) + k(0.25) + 2(0.25) -> k = 5
+
+#6.
+
+.globl main
+.globl classmarks
+.globl compare
+
+.text
+
+main:	addi  $sp, $sp, -12     #establish new frame. decrement the stack pointer
+	sw    $ra, 8($sp)       #save return address
+	sw    $fp, 4($sp)       #save old frame pointer
+        addi  $fp, $sp, 12      #set frame pointer
+	li    $a0, 3		#set M = 3
+	li    $a1, 0x10010000	#set MARKS1
+	addiu $a2, $a1, 16	#set MARKS2
+	addiu $a3, $a2, 16	#set FINAL_MARKS
+	li    $t0, 44
+	sw    $t0, 0($a1)
+	li    $t0, 45
+	sw    $t0, 4($a1)
+	li    $t0, 43
+	sw    $t0, 8($a1)
+	li    $t0, 43
+	sw    $t0, 0($a2)
+	li    $t0, 47
+	sw    $t0, 4($a2)
+	li    $t0, 42 
+	sw    $t0, 8($a2)
+	jal   classmarks
+	lw    $ra, 8($sp)
+	lw    $fp, 4($sp)
+	addi  $sp, $sp, 12
+	jr    $ra
+
+classmarks: addi $t1, $0, 0 	#initialize i
+loop:       lw   $t2, 0($a1)	#MARKS1[i]
+	    lw   $t3, 0($a2)	#MARKS2[i]
+	    jal  compare	#use the compare command
+	    slt  $t5, $t4, $0
+	    addi $t1, $t1, 1
+	    addi $a1, $a1, 4
+	    addi $a2, $a2, 4
+	    beq  $t5, $0, lessthan
+	    sw   $t2, $0($a3)
+            addi $a3, $a3, 4
+            j    loop
+lessthan:   sw   $t3, 0($a3)
+	    addi $a3, $a3, 4
+	    j    loop
+compare:    sub  $t4, $t2, $t3
+	    jr   $ra
