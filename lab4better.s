@@ -80,8 +80,6 @@ finish:      lw   $fp, 4($sp)    #restore the frame pointer
 compare:     sub  $s5, $t2, $t3  #compare the two numbers
     	     jr   $ra
 
-finish:
-
 	     
              
 	     
