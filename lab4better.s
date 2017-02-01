@@ -74,7 +74,7 @@ finish:      lw   $fp, 4($sp)    #restore the frame pointer
              lw   $s5, 28($sp)
              lw   $s6, 32($sp)
              lw   $s7, 36($sp)
-             addi $fp, $sp, 36   #restore the frame pointer
+             addi $sp, $sp, 36   #restore the stack pointer
              jr   $ra            #return to the old $ra
 
 compare:     sub  $s5, $t2, $t3  #compare the two numbers
