@@ -53,7 +53,18 @@ MaxSumBoundary:
 #	$a3 is the direction (either 0 or 1)
 #	$v0 returns the maximum subarray
 #   Write your code here
-jr   $ra
+beq  $a1, $a2, baseCase		#check if s == e. if s == e, then we are at the base case of the recursion formula
+beq  $a3, $0,  backTraverse	#check if $a3 == 0. if so, then we traverse backwards. else traverse forwards
+addi $a1, $0,  1		#traverse forwards. increment s by 1.	
+	
+
+backTraverse:
+baseCase:
+sll  $t0, $a1, 2 		#multiply s by four
+add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
+lw   $t0, 0($t0)		#load arr[s]
+add  $v0, $0, $t0		#place the value of arr[s] into the output register
+jr   $ra 			#jump back to caller
 
 ##########################################################
 MaximumCrossingSum:
@@ -79,7 +90,8 @@ FindMax2:
 #	$a1 holds the first number.
 #	$a2 holds the second number.
 #	$v0 contains the maximum between the 2 input numbers.
-#   Write your code here
+#   	Write your code here
+#	Code last checked on 2/7/2017. Confirmed to be working.
 
 slt $t0, $a1, $a2 	#see if $a1 is less than $a2
 beq $t0, $0, done	#if $a1 > $a2, then jump to done procedure
@@ -95,7 +107,8 @@ FindMax3:
 #	$a2 holds the second number.
 #	$a3 holds the third number.
 #	$v0 contains the maximum among the 3 numbers
-#   Write your code here
+#  	Write your code here
+#	Code last checked on 2/7/2017. Confirmed working.
 slt $t0, $a1, $a2	#check if $a1, is less than $a2
 beq $t0, $0, check 	#if $a1 > $a2, then see if $a1 > $a3, otherwise $a2 > $a1, then check if $a2 > $a3
 slt $t1, $a2, $a3 	#check if $a2 > $a3
