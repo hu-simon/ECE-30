@@ -53,6 +53,9 @@ MaxSumBoundary:
 #	$a3 is the direction (either 0 or 1)
 #	$v0 returns the maximum subarray
 #   Write your code here
+addi $sp, $sp, 32 		#move the stack pointer up
+sw   $ra, 0($sp)		#store the return address 
+sw   $..  4($sp)		#
 beq  $a1, $a2, baseCase		#check if s == e. if s == e, then we are at the base case of the recursion formula
 beq  $a3, $0,  backTraverse	#check if $a3 == 0. if so, then we traverse backwards. else traverse forwards
 addi $a1, $0,  1		#traverse forwards. increment s by 1.	
@@ -64,6 +67,7 @@ sll  $t0, $a1, 2 		#multiply s by four
 add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
 lw   $t0, 0($t0)		#load arr[s]
 add  $v0, $0, $t0		#place the value of arr[s] into the output register
+sw   $v0, 0x00000021		#store the return value in some random place in memory
 jr   $ra 			#jump back to caller
 
 ##########################################################
