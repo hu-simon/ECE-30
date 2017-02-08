@@ -96,4 +96,19 @@ FindMax3:
 #	$a3 holds the third number.
 #	$v0 contains the maximum among the 3 numbers
 #   Write your code here
+slt $t0, $a1, $a2	#check if $a1, is less than $a2
+beq $t0, $0, check 	#if $a1 > $a2, then see if $a1 > $a3, otherwise $a2 > $a1, then check if $a2 > $a3
+slt $t1, $a2, $a3 	#check if $a2 > $a3
+beq $t1, $0, second 	#if $a2 > $a3, then the second number is the maximum
+jr $ra
+check: 
+slt $t1, $a1, $a3 	#check if $a1 > $a3
+beq $t1, $0, first	#if $a1 > $a3, then $a1 is the largest
+add $v0 $0, $a3		#otherwise, $a3 is the biggest so set $v0 to $a3
+jr $ra
+first:
+add $v0, $0, $a1	#$a1 is the maximum, so set $v0 to $a1
+jr $ra
+second:
+add $v0, $0, $a2 	#$a2 is the maximum, so set $v0 to $a2
 jr $ra
