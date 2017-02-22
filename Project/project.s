@@ -53,23 +53,48 @@ MaxSumBoundary:
 #	$a3 is the direction (either 0 or 1)
 #	$v0 returns the maximum subarray
 #   Write your code here
-addi $sp, $sp, 32 		#move the stack pointer up
-sw   $ra, 0($sp)		#store the return address 
-sw   $..  4($sp)		#
+addi $sp, $sp, 32		#increment the stack pointer
+sw   $ra, 0($sp)		#store old return address
+sw   $fp, 4($sp)		#store old frame pointer
+sw   $a1, 8($sp) 		#store the value of s
+sw   $a2, 12($sp) 		#store the value of e
+sw   $a3, 16($sp)		#store the direction value
+sw   $v0, 20($sp)		#store the return value
+sw   $s1, 24($sp)
+addi $fp, $fp, 32		#increment the frame pointer
+main:
+beq  $a1, $a2, base		#check for base case, when s = e
+beq  $a3, $0, traverseb		#if $a3 = 0, then traverse backwards
+traversef:
+addi $a1, $a1, 1		#increment s by 1
+jal MaxSumBoundary		#call MaxSumBoundary
+addi $a2
+jal FindMax2
+traverseb:
+
+base:
+sll  $t0, $a1, 2		#multiply s by four
+add  $t0, $t0, $a0		#add the address of s to the address of the first element of arr[]
+lw   $t0, 0($t0)		#load arr[s]
+add  $v0, $0, $t0		#place arr[s] into the output register
+lw   $ra, 0($sp) 		#load the return address
+lw   $fp, 4($sp) 		#load the frame pointer
+addi $fp, $0, -32		#decrement the frame pointer
+jr   $ra
+
+/*
 beq  $a1, $a2, baseCase		#check if s == e. if s == e, then we are at the base case of the recursion formula
 beq  $a3, $0,  backTraverse	#check if $a3 == 0. if so, then we traverse backwards. else traverse forwards
-addi $a1, $0,  1		#traverse forwards. increment s by 1.	
-	
-
+addi $t1, $a1,  1		#traverse forwards. increment s by 1.	
 backTraverse:
 baseCase:
 sll  $t0, $a1, 2 		#multiply s by four
 add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
 lw   $t0, 0($t0)		#load arr[s]
 add  $v0, $0, $t0		#place the value of arr[s] into the output register
-sw   $v0, 0x00000021		#store the return value in some random place in memory
+sw   $v0, 0x40020401		#store the return value in some random place in memory
 jr   $ra 			#jump back to caller
-
+*/
 ##########################################################
 MaximumCrossingSum:
 #	$a0 contains arr[]
@@ -87,6 +112,39 @@ MaximumSubArraySum:
 #	$a1 contains s
 #	$a2 contains e
 #   Write your code here
+beq  $a1, $a2, base
+add  $t1, $a1, $a2 		#calculate s + e. store this in $t1, which will represent m
+srl  $t1, $t1, 1		#divide by 2
+callLeft: 			#this procedure will call MaximumSubArraySum on the left subarray
+add  $t2, $0, $a2 		#$t2 will store e
+add  $a2, $0, $t1		#store m into the argument register
+jal  MaximumSubArraySum		#call MaximumSubArraySum
+add  $s0, $0, $v0		#store the result in register $s0
+callRight:  			#this procedure will call MaximumSubArraySum on the right subarray
+add  $t3, $0, $a1		#$t3 will store s
+addi $a1, $a2, 1		#set the first argument to m + 1
+add  $a2, $0, $t2		#set the second argument to e
+jal  MaximumSubArraySum		#call MaximumSubArray
+add  $s1, $0, $v0		#store the result in register $s1
+callMaxCrossing: 		#this procedure calls the MaxCrossingSum procedure
+add  $a1, $0, $t3 		#set first argument register to s
+add  $a2, $0, $t1		#set second argument register to m
+add  $a3, $0, $t2		#set third argument register to e
+jal MaxCrossingSum		#call MaxCrossingSum
+add  $s2, $0, $v0		#store the result in $s2
+findMax:			#this procedure finds the maximum value of the values found in the previous procedures
+add  $a0, $0, $s0		#set the first argument register to the result of the first MaximumSubArraySum call
+add  $a1, $0, $s1		#set the second argument register to the result of the second MaximumSubArraySum call 
+add  $a2, $0, $s2		#set the final argument register to the result of the MaxCrossingSum call
+jal FindMax3			#call the FindMax3 procedure
+add  $s4, $0, $v0		#store the result of the FindMax3 call in $s4
+done: 
+jr $ra
+base: 
+sll  $t0, $a2, 2 		#multiply s by four
+add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
+lw   $t0, 0($t0) 		#load arr[s]
+add  $v0, $0, $t0		#store value of arr[s] into output register
 jr $ra
 
 ##########################################################
