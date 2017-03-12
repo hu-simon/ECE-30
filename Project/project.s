@@ -18,8 +18,9 @@ main: ## Start of code section
 li $a1, 0
 la $a2, size 
 lw $a2, 0($a2)
+addi $a3, $0, 1
 la $a0, array1
-jal MaximumSubArraySum # MaxSubArraySum(arr,0, size-1);
+jal MaxSumBoundary # MaxSubArraySum(arr,0, size-1);
 move $a0,$v0 #result of MaxSubArraySum is stored in $v1 store that as argument of print sum
 jal printsum
 li $v0, 10 # terminate program
@@ -53,7 +54,7 @@ MaxSumBoundary:
 #	$a3 is the direction (either 0 or 1)
 #	$v0 returns the maximum subarray
 #   Write your code here
-addi $sp, $sp, 32		#increment the stack pointer
+addi $sp, $sp, -32		#increment the stack pointer
 sw   $ra, 0($sp)		#store old return address
 sw   $fp, 4($sp)		#store old frame pointer
 sw   $a1, 8($sp) 		#store the value of s
@@ -61,18 +62,24 @@ sw   $a2, 12($sp) 		#store the value of e
 sw   $a3, 16($sp)		#store the direction value
 sw   $v0, 20($sp)		#store the return value
 sw   $s1, 24($sp)
-addi $fp, $fp, 32		#increment the frame pointer
-main:
+addi $fp, $fp, -32		#increment the frame pointer
+main_procedure:
 beq  $a1, $a2, base		#check for base case, when s = e
 beq  $a3, $0, traverseb		#if $a3 = 0, then traverse backwards
 traversef:
-jal findMax2
-addi $a1, $a1, 1		#increment s by 1
-j MaxSumBoundary		#call MaxSumBoundary
+lw   $t1, 0($a0) 
+addi $a1, $a1, 4		#increment s by 1
+lw   $t2, 4($a0)
+add  $t3, $t1, $t2
+addi $a0, $t3, 0
+addi $a1, $t2, 0
+jal FindMax2  
+jal MaxSumBoundary		#call MaxSumBoundary
+
 traverseb:
-jal findMax2
+jal FindMax2
 addi $a1, $a1, -1
-j MaxSumBoundary
+jal MaxSumBoundary
 
 base:
 sll  $t0, $a1, 2		#multiply s by four
@@ -102,7 +109,7 @@ MaximumSubArraySum:
 #	$a1 contains s
 #	$a2 contains e
 #   Write your code here
-beq  $a1, $a2, base
+beq  $a1, $a2, base_case
 add  $t1, $a1, $a2 		#calculate s + e. store this in $t1, which will represent m
 srl  $t1, $t1, 1		#divide by 2
 callLeft: 			#this procedure will call MaximumSubArraySum on the left subarray
@@ -130,7 +137,7 @@ jal FindMax3			#call the FindMax3 procedure
 add  $s4, $0, $v0		#store the result of the FindMax3 call in $s4
 done: 
 jr $ra
-base: 
+base_case: 
 sll  $t0, $a2, 2 		#multiply s by four
 add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
 lw   $t0, 0($t0) 		#load arr[s]
@@ -146,10 +153,10 @@ FindMax2:
 #	Code last checked on 2/7/2017. Confirmed to be working.
 
 slt $t0, $a1, $a2 	#see if $a1 is less than $a2
-beq $t0, $0, done	#if $a1 > $a2, then jump to done procedure
+beq $t0, $0, finish	#if $a1 > $a2, then jump to done procedure
 add $v0, $0, $a2	#if $a1 < $a2, then set $v0 to $a2
 jr $ra			#return to caller
-done: 
+finish: 
 add $v0, $0, $a1	#if $a1 > $a2, then set $v0 to $a1
 jr $ra
 
