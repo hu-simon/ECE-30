@@ -1,4 +1,4 @@
-E 30 Winter 2017
+# ECE 30 Winter 2017
 # Maximum Subarray Sum
 # Student 1 : PID A50001111
 # Lastname, Firstname 
@@ -66,11 +66,13 @@ main:
 beq  $a1, $a2, base		#check for base case, when s = e
 beq  $a3, $0, traverseb		#if $a3 = 0, then traverse backwards
 traversef:
+jal findMax2
 addi $a1, $a1, 1		#increment s by 1
-jal MaxSumBoundary		#call MaxSumBoundary
-addi $a2
-jal FindMax2
+j MaxSumBoundary		#call MaxSumBoundary
 traverseb:
+jal findMax2
+addi $a1, $a1, -1
+j MaxSumBoundary
 
 base:
 sll  $t0, $a1, 2		#multiply s by four
@@ -82,19 +84,7 @@ lw   $fp, 4($sp) 		#load the frame pointer
 addi $fp, $0, -32		#decrement the frame pointer
 jr   $ra
 
-/*
-beq  $a1, $a2, baseCase		#check if s == e. if s == e, then we are at the base case of the recursion formula
-beq  $a3, $0,  backTraverse	#check if $a3 == 0. if so, then we traverse backwards. else traverse forwards
-addi $t1, $a1,  1		#traverse forwards. increment s by 1.	
-backTraverse:
-baseCase:
-sll  $t0, $a1, 2 		#multiply s by four
-add  $t0, $t0, $a0		#add the address of s to the address of the first element of the array
-lw   $t0, 0($t0)		#load arr[s]
-add  $v0, $0, $t0		#place the value of arr[s] into the output register
-sw   $v0, 0x40020401		#store the return value in some random place in memory
-jr   $ra 			#jump back to caller
-*/
+
 ##########################################################
 MaximumCrossingSum:
 #	$a0 contains arr[]
