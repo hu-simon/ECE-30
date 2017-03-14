@@ -48,7 +48,7 @@ jr $ra  # Return back
 ##########################################################
 MaxSumBoundary:
 #	$a0 contains address to arr[].
-#	$a1 contains s 
+#	$a1 intains s 
 #	$a2 contains e
 #	$a3 is the direction (either 0 or 1)
 #	$v0 returns the maximum subarray
@@ -82,7 +82,7 @@ add  $v0, $0, $t0		#place arr[s] into the output register
 lw   $ra, 0($sp) 		#load the return address
 lw   $fp, 4($sp) 		#load the frame pointer
 addi $fp, $0, -32		#decrement the frame pointer
-jr   $ra
+jr i  $ra
 
 
 ##########################################################
@@ -176,4 +176,227 @@ add $v0, $0, $a1	#$a1 is the maximum, so set $v0 to $a1
 jr $ra
 second:
 add $v0, $0, $a2 	#$a2 is the maximum, so set $v0 to $a2
+ T I C E !!! *** END OF WINTER QUARTER *** ACCOUNTS DELETION ***
+====================================================================
+   Tuesday March 28, 2017 is the last day class accounts & disk
+   space will be accessible, they will be deleted the following day.
+   Please back up all your files you wish to keep BEFORE that date.
+
+   For reasons accounts may be closed/suspended see:
+      https://acms.ucsd.edu/students/account-status.shtml
+      https://acms.ucsd.edu/students/account-closure-todo.shtml
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+Account information for user: jhhu
+        Remaining allocation for jhhu was 55.00 units
+        as of Fri Mar 10 05:15:06 2017
+jhhu is connected to recharge printer (real-money) account: la069119
+        la069119 balance: $13.60
+        la069119 status is: active
+        la069119 access groups: nocover
+=============================================================
+For details about your account resources, please use the
+Account Lookup Tool on our website at http://acms.ucsd.edu
+=============================================================
+
+
+/*-----------------------------------------------------------
+Server running slow due to too many users?
+        There are 10 compute servers available:
+        ieng6-240,ieng6-241,ieng6-242,ieng6-243,ieng6-244,ieng6-245,ieng6-246
+        ieng6-247,ieng6-248,ieng6-249,ieng6-250,ieng6-251,ieng6-252,ieng6-253
+        ieng6-254
+
+ECE students, please check with your TA or instructor on which hosts
+you can run your projects.
+
+Please do not login to ieng6-640 or ieng6-641, your processes will be
+killed unless you're authorized to use these hosts.
+-----------------------------------------------------------*/
+
+
+To see all available software packages, type "prep -l" at the command prompt,
+or "prep -h" for more options.
+[jhhu@ieng6-201]:~:501$ cd Desktop/ECE30/ECE-30/Project/
+[jhhu@ieng6-201]:Project:502$ vim project.s
+[jhhu@ieng6-201]:Project:503$ rm .project.s.swp
+[jhhu@ieng6-201]:Project:504$ vim project.s
+[jhhu@ieng6-201]:Project:505$ git add
+Nothing specified, nothing added.
+Maybe you wanted to say 'git add .'?
+[jhhu@ieng6-201]:Project:506$ git add project.s
+[jhhu@ieng6-201]:Project:507$ git commit -m "Commiting"
+[master b9098dc] Commiting
+ 1 file changed, 7 insertions(+), 17 deletions(-)
+[jhhu@ieng6-201]:Project:508$ git push origin master
+Counting objects: 4, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 409 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://www.github.com/hu-simon/ECE-30
+   0bc44f5..b9098dc  master -> master
+[jhhu@ieng6-201]:Project:509$ vim project.s
+[jhhu@ieng6-201]:Project:510$ vim project.s
+[jhhu@ieng6-201]:Project:510$ vim project.s
+jr $ra
+
+##########################################################
+FindMax2:
+#       $a1 holds the first number.
+#       $a2 holds the second number.
+#       $v0 contains the maximum between the 2 input numbers.
+#       Write your code here
+#       Code last checked on 2/7/2017. Confirmed to be working.
+
+slt $t0, $a1, $a2       #see if $a1 is less than $a2
+beq $t0, $0, done       #if $a1 > $a2, then jump to done procedure
+add $v0, $0, $a2        #if $a1 < $a2, then set $v0 to $a2
+jr $ra                  #return to caller
+done:
+add $v0, $0, $a1        #if $a1 > $a2, then set $v0 to $a1
+jr $ra
+
+FindMax3:
+##########################################################
+#       $a1 holds the first number.
+#       $a2 holds the second number.
+#       $a3 holds the third number.
+#       $v0 contains the maximum among the 3 numbers
+#       Write your code here
+#       Code last checked on 2/7/2017. Confirmed working.
+slt $t0, $a1, $a2       #check if $a1, is less than $a2
+beq $t0, $0, check      #if $a1 > $a2, then see if $a1 > $a3, otherwise $a2 > $a1, then check if $a2 > $a3
+slt $t1, $a2, $a3       #check if $a2 > $a3
+beq $t1, $0, second     #if $a2 > $a3, then the second number is the maximum
+jr $ra
+check:
+slt $t1, $a1, $a3       #check if $a1 > $a3
+beq $t1, $0, first      #if $a1 > $a3, then $a1 is the largest
+add $v0 $0, $a3         #otherwise, $a3 is the biggest so set $v0 to $a3
+jr $ra
+first:
+add $v0, $0, $a1        #$a1 is the maximum, so set $v0 to $a1
+jr $ra
+second:
+add $v0, $0, $a2        #$a2 is the maximum, so set $v0 to $a2
+jr $ra
+                                           ==========================================
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ N O T I C E !!! *** END OF WINTER QUARTER *** ACCOUNTS DELETION ***
+====================================================================
+   Tuesday March 28, 2017 is the last day class accounts & disk
+   space will be accessible, they will be deleted the following day.
+   Please back up all your files you wish to keep BEFORE that date.
+
+   For reasons accounts may be closed/suspended see:
+      https://acms.ucsd.edu/students/account-status.shtml
+      https://acms.ucsd.edu/students/account-closure-todo.shtml
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+Account information for user: jhhu
+        Remaining allocation for jhhu was 55.00 units
+        as of Fri Mar 10 05:15:06 2017
+jhhu is connected to recharge printer (real-money) account: la069119
+        la069119 balance: $13.60
+        la069119 status is: active
+        la069119 access groups: nocover
+=============================================================
+For details about your account resources, please use the
+Account Lookup Tool on our website at http://acms.ucsd.edu
+=============================================================
+
+
+/*-----------------------------------------------------------
+Server running slow due to too many users?
+        There are 10 compute servers available:
+        ieng6-240,ieng6-241,ieng6-242,ieng6-243,ieng6-244,ieng6-245,ieng6-246
+        ieng6-247,ieng6-248,ieng6-249,ieng6-250,ieng6-251,ieng6-252,ieng6-253
+        ieng6-254
+
+ECE students, please check with your TA or instructor on which hosts
+you can run your projects.
+
+Please do not login to ieng6-640 or ieng6-641, your processes will be
+killed unless you're authorized to use these hosts.
+-----------------------------------------------------------*/
+
+
+To see all available software packages, type "prep -l" at the command prompt,
+or "prep -h" for more options.
+[jhhu@ieng6-201]:~:501$ ceng6-201]:Project:505$ git add
+Nothing specified, nothing added.
+Maybe you wanted to say 'git add .'?
+[jhhu@ieng6-201]:Project:506$ git add project.s
+[jhhu@ieng6-201]:Project:507$ git commit -m "Commiting"
+[master b9098dc] Commiting
+ 1 file changed, 7 insertions(+), 17 deletions(-
+[jhhu@ieng6-201]:Project:503$ rm .project.s.swp
+[jhhu@ieng6-201]:Project:504$ vim project.s
+[jhhu@ieng6-201]:Project:505$ git add
+Nothing specified, nothing added.
+Maybe you wanted to say 'git add .'?
+[jhhu@ieng6-201]:Project:506$ git add project.s
+[jhhu@ieng6-201]:Project:507$ git commit -m "Commiting"
+[master b9098dc] Commiting
+ 1 file changed, 7 insertions(+), 17 deletions(-)
+[jhhu@ieng6-201]:Project:508$ git push origin master
+Counting objects: 4, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 409 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://www.github.com/hu-simon/ECE-30
+   0bc44f5..b9098dc  master -> master
+[jhhu@ieng6-201]:Project:509$ vim project.s
+[jhhu@ieng6-201]:Project:510$ vim project.s
+[jhhu@ieng6-201]:Project:510$ vim project.s
+jr $ra
+
+##########################################################
+FindMax2:
+#       $a1 holds the first number.
+#       $a2 holds the second number.
+#       $v0 contains the maximum between the 2 input numbers.
+#       Write your code here
+#       Code last checked on 2/7/2017. Confirmed to be working.
+
+slt $t0, $a1, $a2       #see if $a1 is less than $a2
+beq $t0, $0, done       #if $a1 > $a2, then jump to done procedure
+add $v0, $0, $a2        #if $a1 < $a2, then set $v0 to $a2
+jr $ra                  #return to caller
+done:
+add $v0, $0, $a1        #if $a1 > $a2, then set $v0 to $a1
+jr $ra
+
+FindMax3:
+##########################################################
+#       $a1 holds the first number.
+#       $a2 holds the second number.
+#       $a3 holds the third number.
+#       $v0 contains the maximum among the 3 numbers
+#       Write your code here
+#       Code last checked on 2/7/2017. Confirmed working.
+slt $t0, $a1, $a2       #check if $a1, is less than $a2
+beq $t0, $0, check      #if $a1 > $a2, then see if $a1 > $a3, otherwise $a2 > $a1, then check if $a2 > $a3
+slt $t1, $a2, $a3       #check if $a2 > $a3
+beq $t1, $0, second     #if $a2 > $a3, then the second number is the maximum
+jr $ra
+check:
+slt $t1, $a1, $a3       #check if $a1 > $a3
+beq $t1, $0, first      #if $a1 > $a3, then $a1 is the largest
+add $v0 $0, $a3         #otherwise, $a3 is the biggest so set $v0 to $a3
+jr $ra
+first:
+add $v0, $0, $a1        #$a1 is the maximum, so set $v0 to $a1
+jr $ra
+second:
+add $v0, $0, $a2        #$a2 is the maximum, so set $v0 to $a2
 jr $ra
