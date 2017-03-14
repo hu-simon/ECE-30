@@ -61,7 +61,7 @@ sw   $a2, 12($sp) 	# store the value of e
 sw   $a3, 16($sp)	# store the direction value
 sw   $v0, 20($sp) 	# store the return value
 jal calculate
-sw   $t0, 24($sp) 	# store the value in the array at the current array position
+sw   $s0, 24($sp) 	# store the value in the array at the current array position
 addi $fp, $fp, 32	# increment the frame pointer
 execute:
 beq $a1, $a2, base_case	# check for base case, s == e
@@ -79,21 +79,21 @@ jr $ra
 
 base_case:		# we are now at the base case
 jal calculate 		# calculate the current array value (base case value)
-add $s1, $0, $t0	# store this in $s1
-lw $ra, 0($sp)		# load previous stack return address
-lw $fp, 4($sp)		# load previous stack frame pointer
-add $s2, $s1, $t0	# add the two elements
+add $s1, $0, $s0	# store this in $s1
+add $s2, $s1, $s0	# add the two elements
 add $a1, $0, $s1	# load the first number into the argument
 add $a2, $0, $s2	# load the second number into the argument
 jal FindMax2 		# call the FindMax2 procedure
 sw $v0, 28($sp)		# store the result of FindMax2
+lw $ra, 0($sp)	
+lw $fp, 4($sp)	
 jr $ra
 
 calculate:
-sll $t0, $a1, 2		# multiply s by four
-add $t0, $t0, $a0	# add the address of s to the address of the first element of array
-lw $t0, 0($t0)		# load arr[s]
-add $t0	$0, $t0		# place arr[s] into register $t1
+sll $s0, $a1, 2		# multiply s by four
+add $s0, $s0, $a0	# add the address of s to the address of the first element of array
+lw $s0, 0($s0)		# load arr[s]
+add $s0	$0, $s0		# place arr[s] into register $t1
 jr $ra
 ##########################################################
 MaximumCrossingSum:
