@@ -223,7 +223,7 @@ lw $a3, 16($sp)
 addi $sp, $sp, 32	# move the stack pointer down, prepare to pop stack
 addi $s2, $v0, 0	# store the output of the call to MaxSumBoundary to $s2
 addi $sp, $sp, -32
-addi $v0, $s1, $s2	# store leftSum + rightSum
+add $v0, $s1, $s2	# store leftSum + rightSum
 			# now we prepare to return address
 lw $ra, 4($sp)		# load return address
 lw $fp, 8($sp)		# load frame pointer address
@@ -239,6 +239,102 @@ MaximumSubArraySum:
 #	$a1 contains s
 #	$a2 contains e
 #   Write your code here
+addi $sp, $sp, -32 	# move the stack pointer up, prepare another stack
+sw $ra, 4($sp)		# store the return address
+sw $fp, 8($sp)		# store the address of the frame pointer
+sw $s0, 12($sp)		# store the save values on the stack
+sw $s1, 16($sp)
+sw $s2, 20($sp)		
+addi $fp, $sp, 32	# move the frame pointer up
+
+bne $a1, $a2, ArgNotEqual	# check to see if s == e. if yes, return arr[s], else, go to ArgNotEqual procedure
+sll $t0, $a1, 2			# calculate s*4
+add $t1, $a0, $t0		# calculate arr + (s*4)
+lw $v0, 0($t1) 			# store arr[s] 
+j MaxSubArraySumEnd		# we're done and jump to the end
+
+ArgNotEqual:
+add $t4, $a1, $a2 		# calculate s + 2
+srl $t4, $t4, 1			# calculate (s+2)/2, the middle of the array 
+
+addi $sp, $sp, -32		# move the stack pointer up, prepare another stack
+sw $a0, 4($sp)			# store arguments on the stack
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
+
+addi $a2, $t4, 0		# store the address pointing to the middle of the array into the argument register, prepare to do recursive call
+jal MaximumSubArraySum		# call MaximumSubArraySum 
+				# now we are done, so restore the arguments
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
+
+addi $sp, $sp, 32 		# move the stack pointer down 
+addi $s0, $v0, 0		# store the result of the MaximumSubArraySum call into a save register
+
+addi $sp, $sp, -32		# move the stack pointer up, prepare another stack
+sw $a0, 4($sp)			# store the arguments on the stack
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
+
+addi $t4, $t4, 1		# calculate m + 1 and store it in a register
+addi $a1, $t4, 0		# set argument parameters to prepare for another recursive call
+jal MaximumSubArraySum		# call MaximumSubArraySum
+				# now we are done, so restore arguments
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
+addi $sp, $sp, 32		# move the stack pointer down, pop out stack
+addi $s1, $v0, 0		# store the output of the recursive call into a save register
+
+addi $sp, $sp, -32		# move the stack pointer up, prepare another stack for procedure call to MaxCrossingSum
+$a0, 4($sp)			# store argument registers. not sure if this is needed, just paranoid
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
+
+addi $t2, $a2, 0		# set $t2 to e, this is just a temporary transfer variable
+addi $a2, $t4, 0		# set the second argument to m, the middle of the array
+addi $a3, $t2, 0		# set the third argument to e, prepare to call MaximumCrossingSum 
+jal MaximumCrossingSum		# call the MaximumCrossingSum procedure
+				# now we are done and we need to restore the arguments
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
+
+addi $sp, $sp, 32		# move the stack pointer down
+addi $s2, $v0, 0		# store the output of this call into a save register
+
+addi $sp, $sp, -32		# move the stack pointer up, prepare another stack for FindMax3 call
+sw $a0, 4($sp)			# store the arguments onto the stack, in case we need them later
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
+
+addi $a1, $s0, 0		# prepare parameters for FindMax3 call
+addi $a2, $s1, 0		
+addi $a3, $s2, 0	
+jal FindMax3			# call FindMax3 procedure
+				# now we are done and we will restore the arguments
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
+addi $sp, $sp, 32		# move the stack pointer down
+addi $v0, $v0, 0		# store the output of FindMax3 into the output register
+
+MaxSubArraySumEnd:
+lw $ra, 4($sp)			# load the return address
+lw $fp, 8($sp)			# load the frame pointer address
+lw $s0, 12($sp)			# store the save values on the stack
+lw $s1, 16($sp)
+lw $s2, 20($sp)
+addi $sp, $sp, 32		# move the stack pointer down, prepare to return address
 jr $ra
 
 ##########################################################
@@ -247,14 +343,23 @@ FindMax2:
 #	$a2 holds the second number.
 #	$v0 contains the maximum between the 2 input numbers.
 #   Write your code here
+addi $sp, $sp, -32	# move the stack pointer up, prepare another stack
+sw $ra, 4($sp)		# store the return address into the stack
+sw $fp, 8($sp) 		# store the frame pointer address into the stack
+addi $fp, $sp, 32	# move the frame pointer up
 
 slt $t0, $a1, $a2	# see if $a1 is less than $a2
-beq $t0, $0, done	# if $a1 > $a2, jump to done procedure
+beq $t0, $0, a1Bigger	# if $a1 > $a2, jump to done procedure
 add $v0, $0, $a2	# if $a1 < $a2, set $v0 to $a2
-jr $ra			# return to caller
-done: 
+j done	
+a1Bigger:
 add $v0, $0, $a1	# if $a1 > $a2, set $v0 to $a1
+done: 
+lw $ra, 4($sp)		# restore the return address
+lw $fp, 8($sp)		# restore the frame pointer
+addi $sp, $sp, 32	# move the stack pointer down, prepare to return address 
 jr $ra
+
 
 FindMax3:
 ##########################################################
@@ -263,17 +368,25 @@ FindMax3:
 #	$a3 holds the third number.
 #	$v0 contains the maximum among the 3 numbers
 #   Write your code here
+addi $sp, $sp, -32 	# move stack pointer up, prepare new stack
+sw $ra, 4($sp)		# store the return addres+s
+sw $fp, 8($sp)		# store the address of the current frame pointer
+addi $fp, $sp, 32	# move the frame pointer up
 
 slt $t0, $a1, $a2	# check if $a1 < $a2
 beq $t0, $0, check	# if $a1 > $a2, check for $a1 > $a3, otherwise $a2 > $a1 and check $a2 > $a3
 slt $t1, $a2, $a3	# check if $a2 > $a3
 beq $t1, $0, second 	# if $a2 > $a3, then $a2 is maximum
-jr $ra
+j FindMax3end
 check:
 slt $t1, $a2, $a3	# check if $a1 > $a3
 beq $t1, $0, first	# if $a1 > $a3, then $a1 is the largest
 add $v0, $0, $a3	# otherwise, $a3 is the largest, so set $v0 to $a3
-jr $ra
+j FindMax3End
 first:
 add $v0, $0, $a1	# $a1 is the maximum, so set $v0 to $a1
+FindMax3End:
+lw $ra, 4($sp)		# load the return address
+lw $fp, 8($sp) 		# load the address of the frame pointer
+addi $sp, $sp, 32	# move the stack pointer down, prepare to jump return
 jr $ra
