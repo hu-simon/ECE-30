@@ -59,7 +59,7 @@ sw $fp, 4($sp) 		# store frame pointer
 sw $s0, 8($sp)		# store the save values onto the stack
 sw $s1, 12($sp)		
 sw $s2, 16($sp)	
-addi $fp, $sp, 20	# move the frame pointer up
+addi $fp, $sp, 16	# move the frame pointer up
 
 beq $a1, $a2, baseCase  # if s == e, then go to notEq. otherwise, base case
 
@@ -244,7 +244,7 @@ sw $fp, 4($sp)		# store the address of the frame pointer
 sw $s0, 8($sp)		# store the save values on the stack
 sw $s1, 12($sp)
 sw $s2, 16($sp)		
-addi $fp, $sp, 20	# move the frame pointer up
+addi $fp, $sp, 16	# move the frame pointer up
 
 bne $a1, $a2, ArgNotEqual	# check to see if s == e. if yes, return arr[s], else, go to ArgNotEqual procedure
 sll $t0, $a1, 2			# calculate s*4
@@ -345,7 +345,7 @@ FindMax2:
 addi $sp, $sp, -20	# move the stack pointer up, prepare another stack
 sw $ra, 0($sp)		# store the return address into the stack
 sw $fp, 4($sp) 		# store the frame pointer address into the stack
-addi $fp, $sp, 20	# move the frame pointer up
+addi $fp, $sp, 4	# move the frame pointer up
 
 slt $t0, $a1, $a2	# see if $a1 is less than $a2
 beq $t0, $0, a1Bigger	# if $a1 > $a2, jump to done procedure
@@ -370,7 +370,7 @@ FindMax3:
 addi $sp, $sp, -20 	# move stack pointer up, prepare new stack
 sw $ra, 0($sp)		# store the return addres+s
 sw $fp, 4($sp)		# store the address of the current frame pointer
-addi $fp, $sp, 20	# move the frame pointer up
+addi $fp, $sp, 4	# move the frame pointer up
 
 slt $t0, $a1, $a2	# check if $a1 < $a2
 beq $t0, $0, check	# if $a1 > $a2, check for $a1 > $a3, otherwise $a2 > $a1 and check $a2 > $a3
