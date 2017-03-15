@@ -1,9 +1,9 @@
 # Project ECE 30 Winter 2017
 # Maximum Subarray Sum
-# Student 1 : PID A50001111
-# Lastname, Firstname 
-# Student 2 : PID A50001112
-# Lastname, Firstname. 
+# Student 1 : PID A99040472
+# Lastname, Kara
+# Student 2 : PID A12916778
+# Hu, Jun Hao
 
 .data ## Data declaration section
 ## String to be printed:
@@ -61,17 +61,17 @@ sw $s1, 16($sp)
 sw $s2, 20($sp)	
 addi $fp, $sp, 20	# move the frame pointer up
 
-beq $a1, $a2, baseCase  # if s == e, then go to notEq. otherwise, base case
-
-notEqual:		# check for the direction 
-beq $a3, $0, backwards	# if $a3 == 0, traverse backwards
-j forwards		# otherwise, $a3 != 0, traverse forwards
+bne $a1, $a2, notEqual  # if s == e, then go to notEq. otherwise, base case
 
 baseCase:
 sll $t0, $a1, 2		# multiply s by four
 add $t1, $a0, $t0	# set $t1 = arr + (s*4)
 lw $v0, 0($t1) 		# return value of arr[s]. i.e. store it in output register
 j MaxSumBoundaryEnd	# jump to the end
+
+notEqual:		# check for the direction 
+bne $a3, $0, forwards	# if $a3 != 0, traverse forwards
+j backwards
 
 forwards:
 addi $sp, $sp, -20 	# allocate space for the stack. move $sp up
@@ -94,10 +94,10 @@ addi $sp, $sp, 20	# move the stack pointer down, prepare to pop stack out
 addi $s0, $v0, 0	# store the output in register $s0
 
 addi $sp, $sp, -20	# move stack pointer up, prepare another stack
-sw $a0, 0($sp)		# store the argument registers onto the stack
-sw $a1, 4($sp) 	
-sw $a2, 8($sp)
-sw $a3, 12($sp)
+sw $a0, 4($sp)		# store the argument registers onto the stack
+sw $a1, 8($sp) 	
+sw $a2, 12($sp)
+sw $a3, 16($sp)
 
 sll $t0, $a1, 2		# multiply s by 4
 add $t1, $a0, $t0	# calculate arr + (s * 4)
@@ -107,20 +107,20 @@ addi $a1, $t2, 0	# set first argument for FindMax2 procedure
 addi $a2, $t3, 0	# set second argument for FindMax2 procedure, prepare to jump
 jal FindMax2		# jump to the FindMax2 procedure, find maximum of two arguments
 			# now we have found the maximum and it is stored in $v0. we proceed to restore arguments
-lw $a0, 0($sp) 		#restore arguments
-lw $a1, 4($sp)
-lw $a2, 8($sp)	
-lw $a3, 12($sp)
+lw $a0, 4($sp) 		#restore arguments
+lw $a1, 8($sp)
+lw $a2, 12($sp)	
+lw $a3, 16($sp)
 addi $sp, $sp, 20	# move the stack pointer down, push the stack out
 addi $v0, $v0, 0	# store the output in $v0 register
 j MaxSumBoundaryEnd	# jump to the end, we are finished
 
 backwards:
 addi $sp, $sp, -20 	# move the stack pointer up
-sw $a0, 0($sp) 		# store all arguments onto the stack
-sw $a1, 4($sp)		
-sw $a2, 8($sp)
-sw $a3, 12($sp)
+sw $a0, 4($sp) 		# store all arguments onto the stack
+sw $a1, 8($sp)		
+sw $a2, 12($sp)
+sw $a3, 16($sp)
 
 addi $a2, $a2, -1 	# decrement e by 1
 addi $a0, $a0, 0	# set argument parameters, prepare to do recursion
@@ -129,18 +129,18 @@ addi $a2, $a2, 0
 addi $a3, $0, 0		# direction is still 0
 jal MaxSumBoundary	# do recursion
 			# now we are done with the recusion and we are back to this address
-lw $a0, 0($sp)		# restore the arguments
-lw $a1, 4($sp)
-lw $a2, 8($sp)
-lw $a3, 12($sp)
+lw $a0, 4($sp)		# restore the arguments
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
 addi $sp, $sp, 20	# move the stack pointer down, prepare to push the stack out
 addi $s0, $v0, 0	# store the output in the register $s0
 
 addi $sp, $sp, -20	# move the stack pointer up, prepare another stack frame
-sw $a0, 0($sp)		# store arguments in the stack
-sw $a1, 4($sp)
-sw $a2, 8($sp)
-sw $a3, 12($sp)
+sw $a0, 4($sp)		# store arguments in the stack
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
 
 sll $t0, $a2, 2		# multiply e by 4
 add $t1, $a0, $t0	# $t1 = arr + (e*4), to get array element
@@ -151,19 +151,19 @@ addi $a1, $t2, 0	# prepare parameters for FindMax2 call
 addi $a2, $t3, 0	
 jal FindMax2		# call the FindMax2 procedure
 			# we are done with FindMax2 procedure and have returned
-lw $a0, 0($sp)		# restore the arguments
-lw $a1, 4($sp)
-lw $a2, 8($sp)
-lw $a3, 12($sp)
+lw $a0, 4($sp)		# restore the arguments
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
 addi $sp, $sp, 20	# move the stack pointer down, prepare to pop stack out
 addi $v0, $v0, 0	# store the output in $v0
 
 MaxSumBoundaryEnd:
-lw $ra, 0($sp)		# load the return address
-lw $fp, 4($sp)		# load the frame pointer
-lw $s0, 8($sp)		# load the save values on the stack
-lw $s1, 12($sp)	
-lw $s2, 16($sp)
+lw $ra, 4($sp)		# load the return address
+lw $fp, 8($sp)		# load the frame pointer
+lw $s0, 12($sp)		# load the save values on the stack
+lw $s1, 16($sp)	
+lw $s2, 20($sp)
 addi $sp, $sp, 20	# move the stack pointer down
 jr $ra			# jump to the return address	
 
@@ -176,14 +176,12 @@ MaximumCrossingSum:
 #	$a3 contains e
 #	$v0 returns the maximum sum of arrays that cross the midpoint
 #   Write your code here
-addi $sp, $sp, -24	# move the stack pointer up 
+addi $sp, $sp, -20	# move the stack pointer up 
 sw $ra, 4($sp)		# save the return address
 sw $fp, 8($sp)		# store the frame pointer
-sw $s0, 12($sp)		# store the save values onto the stack
-sw $s1, 16($sp)	
-sw $s2, 20($sp) 
-sw $s3, 24($sp)	
-addi $fp, $fp, 24	# move the frame pointer up
+sw $s1, 12($sp)		# store the save values onto the stack
+sw $s2, 16($sp)		
+addi $fp, $fp, 16	# move the frame pointer up
 
 addi $sp, $sp, -20	# move the stack pointer up, prepare another stack
 sw $a0, 4($sp) 	# store the arguments on the stack
@@ -191,9 +189,6 @@ sw $a1, 8($sp)
 sw $a2, 12($sp)
 sw $a3, 16($sp)
 
-#addi $a0, $a0, 0
-#addi $a1, $a1, 0
-#addi $a2, $a2, 0
 addi $a3, $0, 0		# set the direction, prepare to call MaxSumBoundary on the left array
 jal MaxSumBoundary	# call MaxSumBoundary on the left array
 			# now we are done and we restore the arguments
@@ -210,15 +205,16 @@ sw $a1, 8($sp)
 sw $a2, 12($sp)
 sw $a3, 16($sp)
 
-addi $a1, $a2, 1	# calculate m + 1 and store the argument in an argument register
-addi $a2, $a3, 0	# calculate e and store the argument in an argument register
-addi $a3, $0, 1		# direction = 1 since we want to move forwards, prepare to call MaxSumBoundary on the right array
+addi $t2, $a2, 1 	# calculate m + 1
+addi $a1, $t2, 0	# store this in the first argument
+addi $a2, $a3, 0	# store e in the second argument
+addi $a3, $0, 1		# set the direction we're going in
 jal MaxSumBoundary
 			# now we are done and we will restore the arguments
-lw $a0, 0($sp)
-lw $a1, 4($sp)
-lw $a2, 8($sp)
-lw $a3, 12($sp)
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
 addi $sp, $sp, 20	# move the stack pointer down, prepare to pop stack
 addi $s2, $v0, 0	# store the output of the call to MaxSumBoundary to $s2
 add $v0, $s1, $s2	# store leftSum + rightSum
@@ -252,11 +248,11 @@ lw  $v0, 0($t1) 			# store arr[s]
 j MaxSubArraySumEnd		# we're done and jump to the end
 
 ArgsNotEqual:
-add $t4, $a1, $a2 		# calculate s + 2
-srl $s1, $t4, 1			# calculate (s+2)/2, the middle of the array 
+add $t4, $a1, $a2 		# calculate s + e
+srl $s1, $t4, 1			# calculate (s+e)/2, the middle of the array 
 
 addi $sp, $sp, -20		# move the stack pointer up, prepare another stack
-sw $a0, 4$sp)			# store arguments on the stack
+sw $a0, 4($sp)			# store arguments on the stack
 sw $a1, 8($sp)
 sw $a2, 12($sp)
 sw $a3, 16($sp)
@@ -286,18 +282,18 @@ addi $a1, $t4, 0		# set argument parameters to prepare for another recursive cal
 addi $a2, $a2, 0
 jal MaximumSubArraySum		# call MaximumSubArraySum
 				# now we are done, so restore arguments
-lw $a0, 0($sp)
-lw $a1, 4($sp)
-lw $a2, 8($sp)
-lw $a3, 12($sp)
+lw $a0, 4($sp)
+lw $a1, 8($sp)
+lw $a2, 12($sp)
+lw $a3, 16($sp)
 addi $sp, $sp, 20		# move the stack pointer down, pop out stack
 addi $s2, $v0, 0		# store the output of the recursive call into a save register
 
 addi $sp, $sp, -20		# move the stack pointer up, prepare another stack for procedure call to MaxCrossingSum
-sw $a0, 0($sp)			# store argument registers. not sure if this is needed, just paranoid
-sw $a1, 4($sp)
-sw $a2, 8($sp)
-sw $a3, 12($sp)
+sw $a0, 4($sp)			# store argument registers. not sure if this is needed, just paranoid
+sw $a1, 8($sp)
+sw $a2, 12($sp)
+sw $a3, 16($sp)
 
 addi $t2, $a2, 0		# set $t2 to e, this is just a temporary transfer variable
 addi $a0, $a0, 0		# load arguments
@@ -374,8 +370,8 @@ FindMax3:
 #	$v0 contains the maximum among the 3 numbers
 #   Write your code here
 addi $sp, $sp, -20 	# move stack pointer up, prepare new stack
-sw $ra, 0($sp)		# store the return addres+s
-sw $fp, 4($sp)		# store the address of the current frame pointer
+sw $ra, 4($sp)		# store the return addres+s
+sw $fp, 8($sp)		# store the address of the current frame pointer
 addi $fp, $sp, 20	# move the frame pointer up
 
 slt $t0, $a1, $a2	# check if $a1 < $a2
@@ -390,8 +386,11 @@ add $v0, $0, $a3	# otherwise, $a3 is the largest, so set $v0 to $a3
 j FindMax3End
 first:
 add $v0, $0, $a1	# $a1 is the maximum, so set $v0 to $a1
+second:
+add $v0, $0, $a2
 FindMax3End:
-lw $ra, 0($sp)		# load the return address
-lw $fp, 4($sp) 		# load the address of the frame pointer
+lw $ra, 4($sp)		# load the return address
+lw $fp, 8($sp) 		# load the address of the frame pointer
 addi $sp, $sp, 20	# move the stack pointer down, prepare to jump return
 jr $ra
+
