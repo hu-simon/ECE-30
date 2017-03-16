@@ -25,6 +25,8 @@ jal printsum
 li $v0, 10 # terminate program
 syscall
 
+# testing area, please delete after done with testing
+
 ##########################################################
 printsum: # Function to print the contents of the array
 # $a0 = value to be printed
