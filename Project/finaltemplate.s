@@ -1,7 +1,7 @@
 # Project ECE 30 Winter 2017
 # Maximum Subarray Sum
 # Student 1 : PID A99040472
-# Lastname, Kara
+# Zheng, Nianqi
 # Student 2 : PID A12916778
 # Hu, Jun Hao
 
